@@ -120,9 +120,7 @@
 /dev/zero		u:object_r:zero_device:s0
 /dev/__kmsg__		u:object_r:klog_device:s0
 /dev/__properties__ u:object_r:properties_device:s0
-
 /dev/socket/flymed      u:object_r:flymed_socket:s0
-
 #############################
 # System files
 #
@@ -167,11 +165,9 @@
 /system/bin/dex2oat     u:object_r:dex2oat_exec:s0
 # patchoat executable has (essentially) the same requirements as dex2oat.
 /system/bin/patchoat    u:object_r:dex2oat_exec:s0
-
 /system/bin/flymed      u:object_r:flymed_exec:s0
 /system/bin/smbd        u:object_r:smbd_exec:s0
 /system/bin/nmbd        u:object_r:nmbd_exec:s0
-
 #############################
 # Vendor files
 #
@@ -202,7 +198,9 @@
 /data/media(/.*)?	u:object_r:media_rw_data_file:s0
 /data/mediadrm(/.*)?	u:object_r:media_data_file:s0
 /data/property(/.*)?	u:object_r:property_data_file:s0
-
+/data/misc/samba(/.*)?          u:object_r:samba_data_file:s0
+/data/system/users/[0-9]+/lock_wallpaper		u:object_r:wallpaper_file:s0
+/data/system/users/[0-9]+/smart_wallpaper_target		u:object_r:wallpaper_file:s0
 # Misc data
 /data/misc/adb(/.*)?            u:object_r:adb_keys_file:s0
 /data/misc/audio(/.*)?          u:object_r:audio_data_file:s0
@@ -230,14 +228,8 @@
 # coredump directory for userdebug/eng devices
 /cores(/.*)?                    u:object_r:coredump_file:s0
 
-/data/misc/samba(/.*)?          u:object_r:samba_data_file:s0
-
 # Wallpaper file for other users
 /data/system/users/[0-9]+/wallpaper		u:object_r:wallpaper_file:s0
-
-/data/system/users/[0-9]+/lock_wallpaper		u:object_r:wallpaper_file:s0
-/data/system/users/[0-9]+/smart_wallpaper_target		u:object_r:wallpaper_file:s0
-
 #############################
 # efs files
 #
@@ -301,16 +293,18 @@
 /data/misc/radvd(/.*)? u:object_r:radvd_data_file:s0 
 /data/misc/sensor.log		u:object_r:bmm050_sensor_log_file:s0
 /data/misc/sensor(/.*)?		u:object_r:sensor_data_file:s0
+/data/misc/stp_dump(/.*)?		u:object_r:stp_dump_data_file:s0
 /data/misc/wide-dhcpv6(/.*)? u:object_r:wide_dhcpv6_data_file:s0
 /data/misc/wpa_supplicant(/.*)? u:object_r:wpa_supplicant_data_file:s0
 /data/nfc_socket(/.*)? u:object_r:nfc_socket:s0
 /data/nvram(/.*)? u:object_r:nvram_data_file:s0
 /nvdata(/.*)? u:object_r:nvdata_file:s0
 /data/SF_dump(./*)? u:object_r:sf_bqdump_data_file:s0
-/data/ipsec(./*)? u:object_r:wod_ipsec_conf_file:s0
-/data/ipsec/wo(./*)? u:object_r:wod_apn_conf_file:s0
+/data/ipsec(/.*)? u:object_r:wod_ipsec_conf_file:s0
+/data/ipsec/wo(/.*)? u:object_r:wod_apn_conf_file:s0
 /data/data_tmpfs_log(/.*)? u:object_r:data_tmpfs_log_file:s0
 /data/tmp_mnt/data_tmpfs_log(/.*)? u:object_r:data_tmpfs_log_file:s0
+/data/thh(/.*)? u:object_r:teei_data_file:s0
 
 ##########################
 # Devices
@@ -333,6 +327,7 @@
 /dev/btif(/.*)? u:object_r:btif_device:s0 
 /dev/btn(/.*)? u:object_r:btn_device:s0
 /dev/BU6429AF(/.*)? u:object_r:BU6429AF_device:s0
+/dev/BU6424AF(/.*)? u:object_r:BU6424AF_device:s0
 /dev/BU64745GWZAF(/.*)? u:object_r:BU64745GWZAF_device:s0
 /dev/cache(/.*)? u:object_r:cache_device:s0 
 /dev/CAM_CAL_DRV(/.*)? u:object_r:CAM_CAL_DRV_device:s0
@@ -475,6 +470,8 @@
 /dev/socket/rild-ims(/.*)? u:object_r:rild_ims_socket:s0
 /dev/socket/rild-atci-md2(/.*)? u:object_r:rild_atci_md2_socket:s0
 /dev/socket/rild-atci(/.*)? u:object_r:rild_atci_socket:s0
+/dev/socket/rild-vsim(/.*)? u:object_r:rild_vsim_socket:s0
+/dev/socket/rild-vsim-md2(/.*)? u:object_r:rild_vsim_md2_socket:s0
 /dev/socket/rild-ctclient u:object_r:rild_ctclient_socket:s0
 /dev/socket/rild-debug-md2(/.*)? u:object_r:rild_debug_md2_socket:s0
 /dev/socket/rild-debug(/.*)? u:object_r:rild_debug_socket:s0
@@ -541,6 +538,7 @@
 /dev/xlog u:object_r:xlog_device:s0
 /dev/offloadservice(/.*)? u:object_r:offloadservice_device:s0
 /dev/irtx u:object_r:irtx_device:s0
+/dev/ir-learning u:object_r:irrx_device:s0
 
 /dev/xt_qtaguid(/.*)? u:object_r:xt_qtaguid_device:s0
 /dev/pmic_ftm(/.*)? u:object_r:pmic_ftm_device:s0
@@ -550,9 +548,11 @@
 /persist(/.*)?         u:object_r:persist_data_file:s0
 /dev/ttyACM0        u:object_r:ttyACM_device:s0
 /dev/hrm       u:object_r:hrm_device:s0
-
-#guoquan for liuliangbao
-/dev/socket/tunman u:object_r:tunman_socket:s0
+/dev/teei_config u:object_r:teei_config_device:s0
+/dev/teei_client u:object_r:teei_client_device:s0
+/dev/tz_vfs u:object_r:teei_vfs_device:s0
+/dev/emmcrpmb0 u:object_r:teei_rpmb_device:s0
+/dev/teei_fp u:object_r:teei_fp_device:s0
 
 #############################
 # sysfs files
@@ -567,10 +567,10 @@
 /sys/devices/platform/msensor/driver(/.*)?	u:object_r:sysfs_msensor_file:s0
 /sys/bus/platform/drivers/mtk-kpd(/.*)?	u:object_r:sysfs_keypad_file:s0
 /sys/power/vcorefs/pwr_ctrl -- u:object_r:sysfs_vcorefs_pwrctrl:s0
-/sys/devices/virtual/tsp_fw/touchscreen/cmd u:object_r:sysfs_tpdfwloader_cmd_file:s0
-/sys/devices/virtual/tsp_fw/touchscreen/data u:object_r:sysfs_tpdfwloader_data_file:s0
 
-/sys/devices/platform/leds-mt65xx/leds/button-backlight/brightness u:object_r:sysfs_buttonlight_file:s0
+#Add by kailong.liu 20150630 for gt9xx_tpd_switch
+/sys/boway_tpd/gt9xx_tpd_switch(/.*)?  u:object_r:boway_tpd_switch_file:s0
+
 
 #############################
 # System files
@@ -604,7 +604,6 @@
 /system/bin/eemcs_mdinit u:object_r:eemcs_mdinit_exec:s0
 /system/bin/emdlogger[0-9]+ u:object_r:emdlogger_exec:s0
 /system/bin/em_svr u:object_r:em_svr_exec:s0
-/system/bin/emodesvr u:object_r:emodesvr_exec:s0
 /system/bin/factory u:object_r:factory_exec:s0
 /system/bin/flashlessd u:object_r:flashlessd_exec:s0
 /system/bin/fuelgauged u:object_r:fuelgauged_exec:s0
@@ -623,6 +622,7 @@
 /system/bin/mdlogger u:object_r:mdlogger_exec:s0
 /system/bin/memsicd3416x u:object_r:memsicd3416x_exec:s0
 /system/bin/memsicd u:object_r:memsicd_exec:s0
+/system/bin/memsicp u:object_r:memsicp_exec:s0
 /system/bin/meta_tst u:object_r:meta_tst_exec:s0
  
 /system/bin/mmp u:object_r:mmp_exec:s0
@@ -651,6 +651,7 @@
 /system/bin/s62xd u:object_r:s62xd_exec:s0
 /system/bin/sn u:object_r:sn_exec:s0
 /system/bin/statusd u:object_r:statusd_exec:s0
+/system/bin/stp_dump3 u:object_r:stp_dump3_exec:s0
 /system/bin/terservice u:object_r:terservice_exec:s0
 /system/bin/thermald u:object_r:thermald_exec:s0
 /system/bin/thermal_manager u:object_r:thermal_manager_exec:s0
@@ -682,15 +683,14 @@
 /system/bin/mmc3524xd u:object_r:mmc3524xd_exec:s0
 /system/bin/mc6470d u:object_r:mc6470d_exec:s0
 /system/bin/qmcX983d u:object_r:qmcX983d_exec:s0
+/system/bin/vtservice u:object_r:vtservice_exec:s0
+/system/bin/teei_daemon u:object_r:teei_daemon_exec:s0
+/system/bin/init_thh u:object_r:init_thh_service_exec:s0
+/system/bin/md_monitor u:object_r:md_monitor_exec:s0
+
+#BEGIN BOWAY,kailong.liu,2016-01-14,for restore HDD
+#/system/bin/preloadhdd.sh  u:object_r:preloadhdd_exec:s0
+#END BOWAY,kailong.liu
 
 # Wallpaper file for smartbook
 /data/system/users/[0-9]+/smartbook_wallpaper	u:object_r:wallpaper_file:s0
-# zte
-/system/bin/logcat u:object_r:logcat_exec:s0
-/system/bin/memtester u:object_r:memtester_exec:s0
-/system/bin/rootcheck u:object_r:rootcheck_exec:s0
-
-/system/bin/app6939     u:object_r:app6939_exec:s0 
-
-#guoquan for liuliangbao
-/system/bin/tunman u:object_r:tunman_exec:s0

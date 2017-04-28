@@ -4,6 +4,7 @@ import init.no_ssd.rc
 import init.ssd_nomuser.rc
 import init.fon.rc
 import init.trustonic.rc
+import init.microtrust.rc
 
 on early-init
     # Set init and its forked children's oom_adj.
@@ -547,7 +548,7 @@ service mobile_log_d /system/bin/mobile_log_d
 
 
 #statusd service
-service statusd /system/bin/statusd -f [/system/bin/flashlessd -l -m 0]
+service statusd /system/bin/statusd -f [/system/bin/flashlessd -m 1]
     socket statusd stream 660 radio radio
     user radio
     group radio cache inet misc system

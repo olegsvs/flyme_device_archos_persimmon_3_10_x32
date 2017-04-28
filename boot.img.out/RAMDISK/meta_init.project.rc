@@ -1,5 +1,3 @@
-import meta_init.c2k.rc
-
 on post-fs
 #
 # Connectivity related modules and character device nodes (Begin)

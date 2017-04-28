@@ -10,6 +10,7 @@ import init.ssd_nomuser.rc
 import init.fon.rc
 import init.aee.rc
 import init.trustonic.rc
+import init.microtrust.rc
 
 on early-init
     # Set init and its forked children's oom_adj.
@@ -104,7 +105,6 @@ loglevel 5
     write /proc/sys/kernel/sched_latency_ns 10000000
     write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
     write /proc/sys/kernel/sched_compat_yield 1
-    write /sys/devices/platform/leds-mt65xx/leds/lcd-backlight/brightness 10
 
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.
@@ -163,13 +163,6 @@ on post-fs
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
     chmod 0770 /cache
-        
-    #zte_meta factory reset flag
-    chown system system /cache
-    chmod 0777 /cache
-    chown system system /cache/factory
-    chmod 0777 /cache/factory
-
     # We restorecon /cache in case the cache partition has been reset.
     restorecon_recursive /cache
 
@@ -223,7 +216,6 @@ on post-fs-data
     # For security reasons, /data/local/tmp should always be empty.
     # Do not place files or directories in /data/local/tmp
     mkdir /data/local/tmp 0771 shell shell
-    mkdir /data/local/log 0771 shell shell
     mkdir /data/data 0771 system system
     mkdir /data/app-private 0771 system system
     mkdir /data/app-asec 0700 root root
@@ -452,14 +444,14 @@ on property:ro.boot.mblogenable=0
 on property:ro.boot.mblogenable=1
     start mobile_log_d
 
-#adb,acm
+#mass_storage,adb,acm
 on property:ro.boot.usbconfig=0
     write /sys/class/android_usb/android0/iSerial $ro.serialno
     write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 19D2
-    write /sys/class/android_usb/android0/idProduct 0299
+    write /sys/class/android_usb/android0/idVendor 0e8d
+    write /sys/class/android_usb/android0/idProduct 2006
     write /sys/class/android_usb/android0/f_acm/instances 1
-    write /sys/class/android_usb/android0/functions adb,acm
+    write /sys/class/android_usb/android0/functions mass_storage,adb,acm
     write /sys/class/android_usb/android0/enable 1
     start adbd
 
@@ -468,31 +460,8 @@ on property:ro.boot.usbconfig=1
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/iSerial " "
     write /sys/class/android_usb/android0/idVendor 0e8d
-    write /sys/class/android_usb/android0/idProduct 2000
+    write /sys/class/android_usb/android0/idProduct 2007
     write /sys/class/android_usb/android0/f_acm/instances 1
     write /sys/class/android_usb/android0/functions acm
     write /sys/class/android_usb/android0/bDeviceClass 02
     write /sys/class/android_usb/android0/enable 1
-
-# logcat
-service logcat /system/bin/logcat -r4096 -n 8 -v time -f /data/local/log/logcat.log  -k &
-    user root
-    group shell system log
-
-service logcat_radio /system/bin/logcat -b radio -r4096 -n 6 -v time -f /data/local/log/radio.log &
-    user root
-    group shell system log
-
-service logcat_events /system/bin/logcat -b events -r1024 -n 4 -v time -f /data/local/log/events.log &
-    user root
-    group shell system log
-
-on property:persist.sys.logcat.enable=1
-    start logcat
-    start logcat_radio
-    start logcat_events
-
-on property:persist.sys.logcat.enable=0
-    stop logcat
-    stop logcat_radio
-    stop logcat_events

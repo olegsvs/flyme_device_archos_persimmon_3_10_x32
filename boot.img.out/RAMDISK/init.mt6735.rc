@@ -11,6 +11,7 @@ import init.fon.rc
 import init.volte.rc
 import init.epdg.rc
 import init.trustonic.rc
+import init.microtrust.rc
 
 on init
     export USBOTG_STORAGE /storage/usbotg
@@ -19,7 +20,7 @@ on init
     mkdir /storage/usbotg 0700 root root
     mount tmpfs tmpfs /storage/usbotg mode=0755,uid=1000,gid=1000
     chmod 0666 /dev/kmsg
-# Temp Backward compatibility
+# Temp Backward  compatibility
     mkdir /protect_f 0771 system system
     mkdir /protect_s 0771 system system
     #create mountpoint for persist partition
@@ -137,16 +138,6 @@ on post-fs-data
 
     # NFC
     mkdir /data/nfc_socket 0771 nfc radio
-#zte md5check
-    mkdir /data/local/log 0771 shell shell
-#zte fota
-    chown system system /cache/fota
-    chmod 755 /cache/fota
-    chown root root /cache/fota/error_code
-    chmod 666 /cache/fota/error_code
-
-    chmod 775 /cache
-    chmod 775 /cache/recovery
 
 # -----------------------
 # Add by MTK
@@ -190,13 +181,6 @@ on post-fs-data
     chown root diag /sys/module/tpd_setting/parameters/tpd_em_asamp
     chown root diag /sys/module/tpd_debug/parameters/tpd_em_log
     chown root diag /sys/module/tpd_debug/parameters/tpd_em_log_to_fs
-
-    # TP firmware update
-    chown radio radio /sys/class/tsp_fw/touchscreen/cmd
-    chown radio radio /sys/class/tsp_fw/touchscreen/data
-    chown radio radio /sys/class/tsp_fw/touchscreen/upg
-    chown system system /sys/class/tsp_fw/touchscreen/gesture
-    chown system system /sys/class/tsp_fw/touchscreen/gesture_enable
 
     chmod 0666 /dev/pmem_multimedia
 
@@ -504,14 +488,13 @@ on post-fs-data
     chmod 0660 /dev/camera-fdvt
     chmod 0660 /dev/camera-pipemgr
     chmod 0660 /dev/kd_camera_hw
-    chmod 0660 /dev/kd_camera_flashlight
+# change begin by zhongcai 20150630 for  flashlight
+    chmod 0666 /dev/kd_camera_flashlight
+# change begin by zhongcai 20150630 for  flashlight
     chmod 0660 /dev/kd_camera_hw_bus2
     chmod 0660 /dev/FM50AF
     chmod 0660 /dev/CAM_CAL_DRV
-    chmod 0660 /dev/BU6429AF
-     
-     
-    chown system camera /dev/BU6429AF
+
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
     chown system camera /dev/camera-fdvt
@@ -624,8 +607,6 @@ on boot
     start xlogboot
 
     write /proc/sys/vm/dirty_writeback_centisecs 300
-    #add by zte 
-    #write /proc/sys/vm/swappiness 60
     chmod 0660 /sys/power/autosleep
 
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
@@ -676,7 +657,7 @@ on boot
     chmod 0660 /proc/cpufreq/cpufreq_limited_by_hevc
     chown system system /proc/cpufreq/cpufreq_limited_max_freq_by_user
     chmod 0660 /proc/cpufreq/cpufreq_limited_max_freq_by_user
-    
+
     chown system system /d/ged/hal/total_gpu_freq_level_count
     chmod 0660 /d/ged/hal/total_gpu_freq_level_count
     chown system system /d/ged/hal/custom_boost_gpu_freq
@@ -1098,7 +1079,6 @@ service mtkbt /system/bin/mtkbt
 	socket bt.a2dp.stream dgram 660 bluetooth net_bt
 	user bluetooth
 	group system vpn net_admin inet net_raw net_bt bluetooth net_bt_admin net_bt_stack sdcard_r
-	oneshot
 
 
 #service dpfd /system/bin/dpfd
@@ -1149,7 +1129,7 @@ service wifi2agps /system/bin/wifi2agps
 service mnld /system/xbin/mnld
     class main
     user gps
-    group gps inet misc sdcard_rw sdcard_r media_rw system
+    group gps inet misc sdcard_rw sdcard_r media_rw system radio
     socket mnld stream 660 gps system
 
 service ipod /system/bin/ipod
@@ -1209,6 +1189,11 @@ service emdlogger6 /system/bin/emdlogger6
     disabled
     oneshot
 
+service md_monitor /system/bin/md_monitor
+    class main
+    user system
+    group system radio sdcard_rw inet sdcard_r media_rw
+
 #
 #sensor service (begin)
 #
@@ -1239,6 +1224,13 @@ service memsicd3416x /system/bin/memsicd3416x
 	 user system
     group system
     class main
+
+service memsicp /system/bin/memsicp    
+    user system
+    group system
+    class main
+#add end by zhengtengjiao 20150505 
+
 service akmd8975 /system/bin/akmd8975
     disabled
     user system
@@ -1507,73 +1499,3 @@ service program_binary /system/bin/program_binary_service
     user system
     group graphics
     oneshot
-# zte
-service memtester4 /system/bin/memtester 4M 1
-	oneshot
-	disabled
-
-on property:sys.memtester.enable=4
-	start memtester4
-
-service memtester10 /system/bin/memtester 10M 1
-	oneshot
-	disabled
-
-on property:sys.memtester.enable=10
-	start memtester10
-
-service memtester50 /system/bin/memtester 50M 1
-	oneshot
-	disabled
-
-on property:sys.memtester.enable=50
-	start memtester50
-
-service memtester100 /system/bin/memtester 100M 1
-	oneshot
-	disabled
-
-on property:sys.memtester.enable=100
-	start memtester100
-
-service memtester500 /system/bin/memtester 500M 1
-	oneshot
-	disabled
-
-on property:sys.memtester.enable=500
-	start memtester500
-	
-service rootcheck /system/bin/rootcheck
-	oneshot
-	disabled
-
-on property:sys.md5check.enable=1
-	start rootcheck	
-	
-service rtck_recovery /system/bin/rootcheck  -R
-	oneshot
-	disabled
-
-on property:sys.rtck_recovery.enable=1
-	start rtck_recovery	
-	
-on property:sys.recoverylog=1
-    chown system system /cache
-    chmod 0777 /cache
-    chmod 0777 /cache/recovery
-on property:persist.sys.ne.enable=1
-    write /proc/sys/fs/suid_dumpable 2
-    write /proc/sys/kernel/core_pattern "|/system/bin/aee_core_forwarder /data/core/ %p %s UID=%u GID=%g"
-on property:persist.sys.ne.enable=0
-    write /proc/sys/fs/suid_dumpable 0
-
-#add by backup	
-service app6939 /system/bin/app6939
-    class main    
-    user root		
-	seclabel u:r:app6939:s0
-	
-##### Engineer Mode #############
-service EmodeService /system/bin/emodesvr
-    class main
-    user root

@@ -160,8 +160,8 @@ epdg_service        u:object_r:system_server_service:s0
 rns                 u:object_r:system_server_service:s0
 program_binary      u:object_r:program_binary_service:s0
 multiwindow_service_v1 	u:object_r:system_app_service:s0
-android.App6939Service                    u:object_r:app6939_service:s0
-EmodeService          u:object_r:emode_service:s0
+media.VTS           u:object_r:vtservice_service:s0
+data_shaping        u:object_r:system_server_service:s0
 move_window                               u:object_r:system_server_service:s0
 samba_server                              u:object_r:system_server_service:s0
 samba_client                              u:object_r:system_server_service:s0

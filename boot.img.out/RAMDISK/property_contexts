@@ -215,6 +215,7 @@ ctl.mmc3524xd	u:object_r:ctl_mmc3524xd_prop:s0
 ctl.mc6470d	u:object_r:ctl_mc6470d_prop:s0
 ctl.qmcX983d	u:object_r:ctl_qmcX983d_prop:s0
 ctl.af7133e      u:object_r:ctl_af7133e_prop:s0
+ctl.gmadfs      u:object_r:ctl_gmadfs_prop:s0
 #=============allow statusd==============
 net.cdma.mdmstat u:object_r:net_cdma_mdmstat:s0
 
@@ -237,3 +238,25 @@ ctl.pppd_gprs   u:object_r:pppd_gprs_prop:s0
 
 #=============allow wifi offload deamon  ==============
 net.wo.   u:object_r:mtk_wod_prop:s0
+persist.net.wo.   u:object_r:persist_wod_prop:s0
+
+#=============allow program binary deamon  ==============
+debug.program_binary.    u:object_r:program_binary_prop:s0
+
+#=============allow program dhcp sip deamon  =================
+ctl.dhcp_inform        u:object_r:ctl_dhcp_inform_prop:s0
+ctl.dhcp_inform:ccmni0 u:object_r:ctl_dhcp_inform_prop:s0
+ctl.dhcp_inform:ccmni1 u:object_r:ctl_dhcp_inform_prop:s0
+ctl.dhcp_inform:ccmni2 u:object_r:ctl_dhcp_inform_prop:s0
+
+#=============allow em set protocol================
+volte.emergency.pdn.protocol    u:object_r:mtk_em_pdn_prop:s0
+
+#=============allow teei daemon and init_thh daemon to set property  ==============
+soter.teei.   u:object_r:soter_teei_prop:s0
+
+#=============allow radio to set mtk_volte_enable property  ==============
+persist.mtk.volte.enable u:object_r:mtk_volte_prop:s0
+
+#=============allow radio to set mtk_wfc_enable property  ==============
+persist.mtk.wfc.enable u:object_r:mtk_wfc_prop:s0

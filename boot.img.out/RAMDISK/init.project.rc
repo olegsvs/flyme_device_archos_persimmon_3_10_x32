@@ -1,7 +1,6 @@
 # MTK project .rc configure
 
 import init.mt6735.usb.rc
-import init.c2k.rc
 
 on init
     mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
@@ -50,6 +49,16 @@ on post-fs-data
     chmod 0660 /dev/DW9714AF
     chown system camera /dev/DW9714AF
 
+# add begin by zhongcai 20150403 for af
+    chmod 0660 /dev/BU6429AF
+    chown system camera /dev/BU6429AF
+
+    chmod 0660 /dev/BU6424AF
+    chown system camera /dev/BU6424AF
+
+    chmod 0660 /dev/DW9718AF
+    chown system camera /dev/DW9718AF
+# add end by zhongcai 20150403 for af
     chmod 0660 /dev/AD5820AF
     chown system camera /dev/AD5820AF
 
@@ -101,10 +110,8 @@ on post-fs-data
 # Encrypt phone function
     setprop vold.post_fs_data_done 1
 
-on boot
-#buttonlight test
-    chown radio radio /sys/class/leds/button-backlight/brightness
-    chmod 0664 /sys/class/leds/button-backlight/brightness
+    chmod 0666 /dev/exm0
+
 on init
     # Refer to http://source.android.com/devices/tech/storage/index.html
     # It said, "Starting in Android 4.4, multiple external storage devices are surfaced to developers through
@@ -144,12 +151,6 @@ service atcid-daemon-e /system/bin/atcid
 on early_property:ro.build.type=eng
 start atci_service
 start atcid-daemon-e
-
-# add by yangdeqing for ATCI
-on property:persist.service.atci.autostart=1
-start atci_service
-start atcid-daemon-u
-
 service audio-daemon /system/bin/audiocmdservice_atci
     class main
     socket atci-audio stream 660 media system

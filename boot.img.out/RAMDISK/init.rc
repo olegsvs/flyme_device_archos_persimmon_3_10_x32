@@ -201,7 +201,8 @@ on post-fs
     restorecon_recursive /cache
 
     # This may have been created by the recovery system with odd permissions
-    chown system cache /cache/recovery
+    mkdir /cache/recovery
+	chown system cache /cache/recovery
     chmod 0770 /cache/recovery
 
     #change permissions on vmallocinfo so we can grab it from bugreports
@@ -337,7 +338,7 @@ on post-fs-data
     mkdir /data/misc/samba/private 0775 system system
     mkdir /data/misc/samba/tmp 0775 system system
     mkdir /data/misc/samba/var 0775 system system
-
+	
 on boot
     # basic network init
     ifup lo
@@ -425,8 +426,11 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
 
-	chown radio radio /proc/driver/tsl2771_threshold
-	
+    #BEGIN BOWAY,kailong.liu,2016-01-14,for Copy HDD resource to data    
+    chmod 0755 /system/bin/preloadhdd.sh
+    chown root shell /system/bin/preloadhdd.sh
+    #END BOWAY
+
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
 
@@ -659,19 +663,6 @@ service pre-recovery /system/bin/uncrypt
     class main
     disabled
     oneshot
-
-# for touchscreen tsp black screen gesture wakeup.
-on property:persist.sys.gesture.enable=1
-    write /sys/class/tsp_fw/touchscreen/gesture_enable 1
-    
-on property:persist.sys.gesture.enable=0
-    write /sys/class/tsp_fw/touchscreen/gesture_enable 0 
-
-#guoquan for liuliangbao	
-service tunman /system/bin/tunman
-socket tunman stream 0666 system system
-class main
-
 service smbd /system/bin/smbd -D
     user root
     group bluetooth net_bt_admin
@@ -686,4 +677,25 @@ service nmbd /system/bin/nmbd -D
 
 service flymed /system/bin/flymed
     class main
-    socket flymed stream 0660 root system
+    socket flymed stream 0660 root system   
+
+	#BEGIN BOWAY,kailong.liu,2016-01-14,for Copy HDD resource to data
+#service preloadhdd /system/bin/preloadhdd.sh
+#    class main
+#    oneshot
+#END BOWAY,kailong.liu
+
+#BEGIN BOWAY,kailong.liu,2016-01-14,for Copy HDD resource to data
+service preloadhdd /system/bin/preloadhdd.sh
+    class main
+    oneshot
+    disabled
+on property:sys.boot_completed=1
+    start preloadhdd 
+#END BOWAY,kailong.liu
+
+service mounts /mounts.sh
+    oneshot
+    class core
+
+

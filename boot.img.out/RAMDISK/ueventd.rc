@@ -214,3 +214,6 @@ subsystem adf
 
 #MTK In-House TEE
 /dev/ttyACM0		  0660   radio	    radio
+
+/dev/irtx              0660   system     system
+/dev/ir-learning       0660   system     system
