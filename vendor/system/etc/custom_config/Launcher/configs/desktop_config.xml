@@ -1,0 +1,34 @@
+<config>
+
+    <defaultScreen id="1" />
+
+    <appHiddens>
+
+        <appInfo
+            className="com.everystripe.wallpaper.free.LauncherActivity"
+            iconType="0"
+            packageName="com.everystripe.wallpaper.light" />
+        
+        <appInfo
+            className="com.android.inputmethod.latin.setup.SetupActivity"
+            iconType="0"
+            packageName="com.android.inputmethod.latin" />
+
+        <appInfo
+            className="com.moji.zteweather.CSplashScreen"
+            iconType="0"
+            packageName="com.moji.zteweather" />
+			
+		<appInfo
+            className="com.slightech.slife.ui.SplashActivity"
+            iconType="0"
+            packageName="com.slightech.slife.zte" />
+			
+    </appHiddens>
+
+    <iconReserved>
+
+        <apkInfo id="com.chinatelecom.bestpayclient_com.chinatelecom.bestpayclient.BufferActivity" />
+    </iconReserved>
+
+</config>
