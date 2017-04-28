@@ -1,0 +1,5 @@
+/out/*
+/board/*
+/autopatch/*
+/history_package/*
+/releasetools.pyc
