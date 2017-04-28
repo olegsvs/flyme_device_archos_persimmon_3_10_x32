@@ -9,7 +9,8 @@ Init :
     $ repo sync -c -j4
 
 Build the code:
-   
+    
+    $ . build/envsetup.sh
     $ cd devices
     $ git clone https://github.com/olegsvs/flyme_device_archos_persimmon_3_10_x32 flyme_persimmon
     $ cd flyme_persimmon
