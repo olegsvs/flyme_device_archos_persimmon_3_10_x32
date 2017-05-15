@@ -79,7 +79,7 @@
 
     <phase action="porting">
         <sequence>
-            <command>make porting</command>
+            <command>make porting(huy tebe)</command>
         </sequence>
     </phase>
 </workflow>
